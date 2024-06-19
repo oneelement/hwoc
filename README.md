@@ -6,6 +6,8 @@ Some design decisions were taken with a view to this being built out as a comple
 
 Some functionality is missing from the pages that were not in the requirements, i.e. removing folders, editing, changing your vote etc. These are features that would be added to a fully fledged project but were ommitted here due to time contraints.
 
+The votes are stored in the DB but user votes are stored in local storage to allow users to vote and not be logged in.  Ideally a share url could be generated and sent to non users to allow them to vote on an existing users folders or alternatively redirect them through a sign up process.
+
 I have mocked a logged in user so all folder/favourite DB records are linked to a user.  The user would be authenticated via cookie at a middleware level for all incoming api routes so have tried to keep the user logic roughly where it would take place in this scenario.  In reality there would not be a call to the DB for user as this would come from the decoded cookie token. 
 
 I have also added a destinations page to allow the favourites to be amended.
