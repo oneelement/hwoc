@@ -1,4 +1,4 @@
-import { getCurrentYear } from '@/app/utils/utils'
+import { getCurrentYear } from '@/app/lib/utils/utils'
 
 export default function Footer() {
   return (

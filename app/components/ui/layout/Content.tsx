@@ -4,7 +4,7 @@ type ContentProps = {
 
 export default function Content({ children }: ContentProps) {
   return (
-    <main className="flex-1 px-6 pt-3 max-w-7xl mx-auto ">
+    <main className="flex-1 max-w-7xl min-h-screen mx-auto">
       {children}
     </main>
   )

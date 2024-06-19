@@ -1,0 +1,86 @@
+// schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") 
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model User {
+  id            String       @default(cuid()) @id
+  email         String   @unique
+  folders       Folder[]
+  favorites     Favorite[]
+
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  @@map(name: "users")
+
+}
+
+model Folder {
+  id        String     @default(cuid()) @id
+  name     String
+  userId    String
+  user      User   @relation(fields: [userId], references: [id])
+  destinations Destination[]
+  votes      FolderDestinationVote[]
+
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  @@map(name: "folders")
+  @@index([userId], name: "folder_userId_idx")
+}
+
+model FolderDestinationVote {
+  id        String     @default(cuid()) @id
+  folderId  String
+  folder    Folder   @relation(fields: [folderId], references: [id])
+  destinationId String
+  destination Destination   @relation(fields: [destinationId], references: [id])
+  votes      Int
+  upVotes    Int
+  downVotes  Int
+
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+
+  @@map(name: "folder_destination_votes")
+  @@unique([folderId, destinationId], name: "folder_destination_unique")
+  @@index([folderId], name: "folder_destination_votes_folderId_idx")
+  @@index([destinationId], name: "folder_destination_votes_destinationId_idx")
+}
+
+model Destination {
+  id        String     @default(cuid()) @id
+  name     String
+  country  String
+  image     String
+  folders       Folder[]
+  favorites     Favorite[]
+  votes      FolderDestinationVote[]
+
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+  @@map(name: "destinations")
+}
+
+model Favorite {
+  id        String     @default(cuid()) @id
+  userId    String
+  user      User   @relation(fields: [userId], references: [id])
+  destinationId String
+  destination Destination   @relation(fields: [destinationId], references: [id])
+
+  createdAt     DateTime  @default(now()) @map(name: "created_at")
+  updatedAt     DateTime  @updatedAt @map(name: "updated_at")
+
+  @@map(name: "favorites")
+  @@unique([userId, destinationId], name: "user_destination_unique")
+  @@index([userId], name: "favorites_userId_idx")
+  @@index([destinationId], name: "favorites_destinationId_idx")
+}
