@@ -143,18 +143,12 @@ export async function voteFolderDestination({ folderId, destinationId, vote }: {
       throw new Error('Unauthorized')
     }
 
-    console.log(session)
-
-    console.log(folderId, destinationId, vote)
-
     const existingFolderDestinationVote = await prisma.folderDestinationVote.findFirst({
       where: {
         folderId,
         destinationId
       }
     })
-
-    console.log(existingFolderDestinationVote)
 
     if (existingFolderDestinationVote) {
       const updatedFolderDestinationVote = await prisma.folderDestinationVote.update({
@@ -184,5 +178,24 @@ export async function voteFolderDestination({ folderId, destinationId, vote }: {
   } catch (error) {
     console.error(error)
     throw new Error('Failed to vote for destination')
+  }
+}
+
+export async function deleteFolder({ id }: { id: string }) {
+  try {
+    const session = await getSession()
+    if (!session) {
+      throw new Error('Unauthorized')
+    }
+
+    const folder = await prisma.folder.delete({
+      where: {
+        id
+      }
+    })
+    return folder
+  } catch (error) {
+    console.error(error)
+    throw new Error('Failed to delete folder')
   }
 }

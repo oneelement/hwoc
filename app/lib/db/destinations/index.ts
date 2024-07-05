@@ -51,7 +51,6 @@ export async function getDestinations() {
       },
       select
     })
-    console.log('d ran')
     return destinations.map(destination => {
       return {
         id: destination.id,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { getFavorites, toggleFavorite } from "@/app/lib/db/favorites"
+import { toggleFavorite } from "@/app/lib/db/favorites"
 import handleApiCatch from "../handleApiCatch"
 
 export async function POST(request: NextRequest) {
